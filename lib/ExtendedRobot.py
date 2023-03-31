@@ -1,4 +1,5 @@
 import math
+import time
 from enum import Enum
 
 import PIL
@@ -51,14 +52,14 @@ class ReturnData:
 
 
 class Handel:
-    def execute(self, models: {}, image: any, tensor: Tensor, previous_values: list[ReturnData]) -> ReturnData:
+    def execute(self, models: {}, image, tensor: Tensor, previous_values: list) -> ReturnData:
         pass
 
 
 class ExtendedRobot(Robot):
     camera = None
     models = {}
-    handels: list[Handel] = []
+    handels: list = []
     state = None
     device = None
     a = 0
@@ -69,26 +70,35 @@ class ExtendedRobot(Robot):
     steer_gain = 0
     steer_kd_gain = 0
     steer_bias = 0
-    speed_control = 0
+    speed_control = 0.1
+
+    # global const vars
+    mean = None
+    std = None
 
     def __init__(self, camera: Camera, models: {}, device=torch.device("cpu"), *args, **kwargs):
-        super(Robot, self).__init__(*args, **kwargs)
+        super(ExtendedRobot, self).__init__(*args, **kwargs)
         self.camera = camera
         self.models = models
         self.device = device
+        self.mean = torch.Tensor([0.485, 0.456, 0.406]).half().float().to(device)
+        self.std = torch.Tensor([0.229, 0.224, 0.225]).half().float().to(device)
 
     def start(self):
-        if self.camera is not None:
-            self.camera.observe(self.execute, names='value')
+        self.camera.observe(self.execute, names='value')
 
     def stop(self):
-        super(Robot).stop()
         self.camera.unobserve(self.execute, names='value')
+        time.sleep(0.1)
+        super().stop()
+
+    def destroy(self):
+        self.camera.stop()
 
     def execute(self, change):
         image = change['new']
-        tensor = self.preprocess(image)
-        return_values: list[ReturnData] = []
+        tensor = self.preprocess(image).to(self.device)
+        return_values: list = []
         for handel in self.handels:
             return_data: ReturnData = handel.execute(
                 models=self.models,
@@ -101,9 +111,9 @@ class ExtendedRobot(Robot):
                     break
                 else:
                     self.stop_counter = 0
-            list.append(return_data)
+            return_values.append(return_data)
 
-        last: ReturnData = list.pop()
+        last: ReturnData = return_values.pop()
         x, y = last.poi
         self.a, left, right = self.calculate_speed(self.a, x, y)
         self.left_motor.value = left
@@ -115,19 +125,17 @@ class ExtendedRobot(Robot):
     def unregister(self, handel: Handel):
         self.handels.remove(handel)
 
-    mean = torch.Tensor([0.485, 0.456, 0.406]).half().float()
-    std = torch.Tensor([0.229, 0.224, 0.225]).half().float()
-
     def preprocess(self, image):
         image = PIL.Image.fromarray(image)
-        image = transforms.functional.to_tensor(image)
+        image = transforms.functional.to_tensor(image).to(self.device)
         image.sub_(self.mean[:, None, None]).div_(self.std[:, None, None])
         return image[None, ...]
 
     def calculate_speed(self, last_a: float, x_in: float, y_in: float) -> (float, float, float):
-        a = math.atan2(x_in, y_in)
-        pid = a * self.steer_gain + (a - last_a) * self.steer_kd_gain
-        steer_val = pid + self.steer_bias
-        left = max(min(self.speed_control + steer_val, 1.0), 0.0)
-        right = max(min(self.speed_control - steer_val, 1.0), 0.0)
+        a: float = math.atan2(x_in, y_in)
+        pid: float = a * self.steer_gain + (a - last_a) * self.steer_kd_gain
+        steer_val: float = pid + self.steer_bias
+        left: float = max(min(self.speed_control + steer_val, 1.0), 0.0)
+        right: float = max(min(self.speed_control - steer_val, 1.0), 0.0)
+        # TODO: apply speed limit here
         return a, left, right
