@@ -13,15 +13,15 @@ from jetbot import Robot, Camera
 class State:
 
     def __init__(self):
-        self.max_limit = 1.0
+        self._max_limit = 1.0
 
     @property
     def max_limit(self) -> float:
-        return self.max_limit
+        return self._max_limit
 
     @max_limit.setter
     def max_limit(self, value: float):
-        self.max_limit = value
+        self._max_limit = value
 
 
 class ReturnCommand(Enum):
@@ -31,24 +31,24 @@ class ReturnCommand(Enum):
 
 class ReturnData:
     def __init__(self, command: ReturnCommand, poi: (float, float) = (0, 0)):
-        self.command = command
-        self.poi = poi
+        self._command = command
+        self._poi = poi
 
     @property
     def command(self) -> ReturnCommand:
-        return self.command
+        return self._command
 
     @command.setter
     def command(self, value):
-        self.command = value
+        self._command = value
 
     @property
     def poi(self) -> (float, float):
-        return self.poi
+        return self._poi
 
     @poi.setter
     def poi(self, value):
-        self.poi = value
+        self._poi = value
 
 
 class Handel:
@@ -57,11 +57,8 @@ class Handel:
 
 
 class ExtendedRobot(Robot):
-    camera = None
-    models = {}
     handels: list = []
     state = None
-    device = None
     a = 0
     stop_counter = 0
     stop_limit = 10
@@ -72,36 +69,37 @@ class ExtendedRobot(Robot):
     steer_bias = 0
     speed_control = 0.1
 
-    # global const vars
-    mean = None
-    std = None
-
     def __init__(self, camera: Camera, models: {}, device=torch.device("cpu"), *args, **kwargs):
         super(ExtendedRobot, self).__init__(*args, **kwargs)
-        self.camera = camera
-        self.models = models
-        self.device = device
-        self.mean = torch.Tensor([0.485, 0.456, 0.406]).half().float().to(device)
-        self.std = torch.Tensor([0.229, 0.224, 0.225]).half().float().to(device)
+        print("construct")
+        self._camera = camera
+        self._models = models
+        self._device = device
+        self._mean = torch.Tensor([0.485, 0.456, 0.406]).half().float().to(device)
+        self._std = torch.Tensor([0.229, 0.224, 0.225]).half().float().to(device)
 
     def start(self):
-        self.camera.observe(self.execute, names='value')
+        print("start")
+        self.execute({'new': self._camera.value})
+        self._camera.observe(self.execute, names='value')
 
     def stop(self):
-        self.camera.unobserve(self.execute, names='value')
+        print("stop")
+        self._camera.unobserve(self.execute, names='value')
         time.sleep(0.1)
         super().stop()
 
     def destroy(self):
-        self.camera.stop()
+        self._camera.stop()
 
     def execute(self, change):
+        print("exec")
         image = change['new']
-        tensor = self.preprocess(image).to(self.device)
+        tensor = self.preprocess(image).to(self._device)
         return_values: list = []
         for handel in self.handels:
             return_data: ReturnData = handel.execute(
-                models=self.models,
+                models=self._models,
                 image=image,
                 tensor=tensor,
                 previous_values=return_values
@@ -113,22 +111,26 @@ class ExtendedRobot(Robot):
                     self.stop_counter = 0
             return_values.append(return_data)
 
-        last: ReturnData = return_values.pop()
-        x, y = last.poi
-        self.a, left, right = self.calculate_speed(self.a, x, y)
+        left, right = 0, 0
+        if len(return_values) > 0:
+            last: ReturnData = return_values.pop()
+            x, y = last.poi
+            self.a, left, right = self.calculate_speed(self.a, x, y)
         self.left_motor.value = left
         self.right_motor.value = right
 
     def register(self, handel: Handel):
+        print("register")
         self.handels.append(handel)
 
     def unregister(self, handel: Handel):
+        print("unregister")
         self.handels.remove(handel)
 
     def preprocess(self, image):
         image = PIL.Image.fromarray(image)
-        image = transforms.functional.to_tensor(image).to(self.device)
-        image.sub_(self.mean[:, None, None]).div_(self.std[:, None, None])
+        image = transforms.functional.to_tensor(image).to(self._device)
+        image.sub_(self._mean[:, None, None]).div_(self._std[:, None, None])
         return image[None, ...]
 
     def calculate_speed(self, last_a: float, x_in: float, y_in: float) -> (float, float, float):
