@@ -1,0 +1,26 @@
+# Setup vorher machen
+# benötigt entzippten Ordner train_data mit image und val subfoldern
+# benötigt entsprechende coco128.yaml Datei mit richtigen Pfaden
+# 
+
+
+
+# !git clone https://github.com/ultralytics/yolov5  # clone
+# %cd yolov5
+# %pip install -qr requirements.txt  # install
+
+# import torch
+# import utils
+# display = utils.notebook_init()  # checks
+
+
+# --img war davor 640
+
+# unzip -q ../train_data.zip -d ../
+!python train.py --img 224 --epochs 120 --data coco128.yaml --weights yolov5s.pt
+python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights yolov5s.pt
+
+
+
+#!unzip -q ../test_result_with_images.zip -d ../
+!python detect.py --img 224 --conf 0.3 --source '/content/test_result_with_images/*' --weights '/content/yolov5/runs/train/exp6/weights/best.pt'
