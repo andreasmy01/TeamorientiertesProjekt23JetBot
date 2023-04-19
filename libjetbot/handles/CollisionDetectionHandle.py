@@ -3,7 +3,7 @@ import torch.nn.functional as functional
 from torch import Tensor
 from torch2trt import TRTModule
 
-from libjetbot.ExtendedRobot import Handle, ReturnData, ReturnCommand
+from libjetbot.ExtendedRobot import Handle, ReturnData, ReturnCommand, State
 
 
 class CollisionDetectionHandle(Handle):
@@ -13,7 +13,7 @@ class CollisionDetectionHandle(Handle):
         self._model = TRTModule()
         self._model.load_state_dict(torch.load(path_to_model))
 
-    def execute(self, image, tensor: Tensor, previous_values: list) -> ReturnData:
+    def execute(self, image, tensor: Tensor, previous_values: list, state: State) -> ReturnData:
         collision_chance: float = self.get_collision_chance(tensor)
         if collision_chance > 0.8:
             return ReturnData(command=ReturnCommand.STOP, alpha=0.0, left=0.0, right=0.0)
