@@ -13,7 +13,7 @@ from jetbot import Robot, Camera
 class State:
 
     def __init__(self):
-        self._max_limit = 1.0
+        self._max_limit = 0.1
 
     @property
     def max_limit(self) -> float:
@@ -52,13 +52,12 @@ class ReturnData:
 
 
 class Handel:
-    def execute(self, models: {}, image, tensor: Tensor, previous_values: list) -> ReturnData:
+    def execute(self, models: {}, image, tensor: Tensor, previous_values: list, state: State) -> ReturnData:
         pass
 
 
 class ExtendedRobot(Robot):
     handels: list = []
-    state = None
     a = 0
     stop_counter = 0
     stop_limit = 10
@@ -77,6 +76,7 @@ class ExtendedRobot(Robot):
         self._device = device
         self._mean = torch.Tensor([0.485, 0.456, 0.406]).half().float().to(device)
         self._std = torch.Tensor([0.229, 0.224, 0.225]).half().float().to(device)
+        self._state = State()
 
     def start(self):
         print("start")
@@ -102,13 +102,15 @@ class ExtendedRobot(Robot):
                 models=self._models,
                 image=image,
                 tensor=tensor,
-                previous_values=return_values
+                previous_values=return_values,
+                state=self._state
             )
             if return_data.command == ReturnCommand.STOP:
                 if self.stop_counter < self.stop_limit:
                     break
                 else:
                     self.stop_counter = 0
+
             return_values.append(return_data)
 
         left, right = 0, 0
