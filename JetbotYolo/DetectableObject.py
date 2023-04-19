@@ -22,3 +22,9 @@ class DetectableObject:
 
     def get_size(self):
         return self.get_height() * self.get_width()
+
+    def get_xmax(self):
+        return self.xmax
+
+    def get_ymax(self):
+        return self.ymax

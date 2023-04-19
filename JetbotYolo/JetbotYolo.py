@@ -128,22 +128,22 @@ class JetbotYolo:
         kreuzungen = list()
 
         for obj in objects:
-            if obj['label'] == 'sign_forbidden':
-                forbidden_signs.append(obj)
+            #if obj['label'] == 'sign_forbidden':
+                #forbidden_signs.append(obj)
             elif obj['label'] == 'sign_limit':
                 limit_signs.append(obj)
             elif obj['label'] == 'sign_nolimit':
                 nolimit_signs.append(obj)
             elif obj['label'] == 'sign_stop':
                 stop_signs.append(obj)
-            else:
-                kreuzungen.append(obj)
+            #else:
+                #kreuzungen.append(obj)
 
-        nearest_f = self.compare_and_get_nearest(forbidden_signs)
+        nearest_f = self.compare_and_get_nearest(forbidden_signs) # bleibt bei uns None
         nearest_l = self.compare_and_get_nearest(limit_signs)
         nearest_nl = self.compare_and_get_nearest(nolimit_signs)
         nearest_s = self.compare_and_get_nearest(stop_signs)
-        nearest_k = self.compare_and_get_nearest(kreuzungen)
+        nearest_k = self.compare_and_get_nearest(kreuzungen) # bleibt bei uns None
 
         if nearest_f is not None:
             f_object = DetectableObject(nearest_f['label'], nearest_f['xmin'], nearest_f['ymin'], nearest_f['xmax'], nearest_f['ymax'], nearest_f['score'])

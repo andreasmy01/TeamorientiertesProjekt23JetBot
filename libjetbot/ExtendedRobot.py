@@ -10,6 +10,11 @@ from jetbot import Robot, Camera
 
 
 class State:
+    is_preparing_to_stop = False 
+    frames_preparing_to_stop = 0 # globalen Framecounter an zwei Zeitpunkten subtrahieren
+
+    is_stopped = False
+    frames_stopped = 0 # globalen Framecounter an zwei Zeitpunkten subtrahieren
 
     def __init__(self):
         self._max_limit = 0.1
@@ -21,6 +26,7 @@ class State:
     @max_limit.setter
     def max_limit(self, value: float):
         self._max_limit = value
+
 
 
 class ReturnCommand(Enum):
