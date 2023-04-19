@@ -1,4 +1,3 @@
-import math
 import time
 from enum import Enum
 
@@ -30,9 +29,11 @@ class ReturnCommand(Enum):
 
 
 class ReturnData:
-    def __init__(self, command: ReturnCommand, poi: (float, float) = (0, 0)):
+    def __init__(self, command: ReturnCommand, alpha: float, left: float, right: float):
         self._command = command
-        self._poi = poi
+        self._alpha = alpha
+        self._left = left
+        self._right = right
 
     @property
     def command(self) -> ReturnCommand:
@@ -43,21 +44,37 @@ class ReturnData:
         self._command = value
 
     @property
-    def poi(self) -> (float, float):
-        return self._poi
+    def alpha(self) -> float:
+        return self._alpha
 
-    @poi.setter
-    def poi(self, value):
-        self._poi = value
+    @alpha.setter
+    def alpha(self, value: float):
+        self._alpha = value
+
+    @property
+    def left(self) -> float:
+        return self._left
+
+    @left.setter
+    def left(self, value: float):
+        self._left = value
+
+    @property
+    def right(self) -> float:
+        return self._right
+
+    @right.setter
+    def right(self, value: float):
+        self._right = value
 
 
-class Handel:
-    def execute(self, models: {}, image, tensor: Tensor, previous_values: list) -> ReturnData:
+class Handle:
+    def execute(self, image, tensor: Tensor, previous_values: list) -> ReturnData:
         pass
 
 
 class ExtendedRobot(Robot):
-    handels: list = []
+    handles: list = []
     state = None
     a = 0
     stop_counter = 0
@@ -69,14 +86,13 @@ class ExtendedRobot(Robot):
     steer_bias = 0
     speed_control = 0.1
 
-    def __init__(self, camera: Camera, models: {}, device=torch.device("cpu"), *args, **kwargs):
+    def __init__(self, camera: Camera, device=torch.device('cuda'), *args, **kwargs):
         super(ExtendedRobot, self).__init__(*args, **kwargs)
         print("construct")
         self._camera = camera
-        self._models = models
         self._device = device
-        self._mean = torch.Tensor([0.485, 0.456, 0.406]).half().float().to(device)
-        self._std = torch.Tensor([0.229, 0.224, 0.225]).half().float().to(device)
+        self._mean = torch.Tensor([0.485, 0.456, 0.406]).cuda().half()
+        self._std = torch.Tensor([0.229, 0.224, 0.225]).cuda().half()
 
     def start(self):
         print("start")
@@ -97,9 +113,8 @@ class ExtendedRobot(Robot):
         image = change['new']
         tensor = self.preprocess(image).to(self._device)
         return_values: list = []
-        for handel in self.handels:
-            return_data: ReturnData = handel.execute(
-                models=self._models,
+        for handle in self.handles:
+            return_data: ReturnData = handle.execute(
                 image=image,
                 tensor=tensor,
                 previous_values=return_values
@@ -114,30 +129,23 @@ class ExtendedRobot(Robot):
         left, right = 0, 0
         if len(return_values) > 0:
             last: ReturnData = return_values.pop()
-            x, y = last.poi
-            self.a, left, right = self.calculate_speed(self.a, x, y)
-        self.left_motor.value = left
-        self.right_motor.value = right
+            a, left, right = last.alpha, last.left, last.right
+            self.left_motor.value = left
+            self.right_motor.value = right
+        else:
+            self.left_motor.value = 0.0
+            self.right_motor.value = 0.0
 
-    def register(self, handel: Handel):
+    def register(self, handle: Handle):
         print("register")
-        self.handels.append(handel)
+        self.handles.append(handle)
 
-    def unregister(self, handel: Handel):
+    def unregister(self, handle: Handle):
         print("unregister")
-        self.handels.remove(handel)
+        self.handles.remove(handle)
 
     def preprocess(self, image):
         image = PIL.Image.fromarray(image)
         image = transforms.functional.to_tensor(image).to(self._device)
         image.sub_(self._mean[:, None, None]).div_(self._std[:, None, None])
         return image[None, ...]
-
-    def calculate_speed(self, last_a: float, x_in: float, y_in: float) -> (float, float, float):
-        a: float = math.atan2(x_in, y_in)
-        pid: float = a * self.steer_gain + (a - last_a) * self.steer_kd_gain
-        steer_val: float = pid + self.steer_bias
-        left: float = max(min(self.speed_control + steer_val, 1.0), 0.0)
-        right: float = max(min(self.speed_control - steer_val, 1.0), 0.0)
-        # TODO: apply speed limit here
-        return a, left, right
