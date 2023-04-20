@@ -20,8 +20,8 @@ class ObjectDetectionHandle(Handle):
     def execute(self, image, tensor: Tensor, previous_values: list, state: State) -> ReturnData:
         # invoke method to get classes
         self.yolo.run_detection_only(image)
-        detected = self.yolo.get_filtered_objects()
-        detected = self.getTotalNearestObject(detected)
+
+        detected = self.yolo.get_nearest_object()
 
         # handle detected objects and return command & poi
         return self.__process_class__(detected, state)
