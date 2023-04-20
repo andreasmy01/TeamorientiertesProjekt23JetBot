@@ -130,7 +130,7 @@ class JetbotYolo:
         for obj in objects:
             #if obj['label'] == 'sign_forbidden':
                 #forbidden_signs.append(obj)
-            elif obj['label'] == 'sign_limit':
+            if obj['label'] == 'sign_limit':
                 limit_signs.append(obj)
             elif obj['label'] == 'sign_nolimit':
                 nolimit_signs.append(obj)
