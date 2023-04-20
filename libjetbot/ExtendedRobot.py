@@ -100,7 +100,7 @@ class ExtendedRobot(Robot):
         self._std = torch.Tensor([0.229, 0.224, 0.225]).cuda().half()
         self._state = State()
 
-def start(self):
+    def start(self):
         print("start")
         self.execute({'new': self._camera.value})
         self._camera.observe(self.execute, names='value')

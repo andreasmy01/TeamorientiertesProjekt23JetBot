@@ -104,6 +104,7 @@ class JetbotYolo:
             print("currently no objects available")
 
         self.filter_nearest_object_of_each_type(objs)
+        self.detect_Nearest_object()
 
         for obj in objs:
             [(xmin,ymin),(xmax,ymax)] = obj['bbox']
@@ -111,12 +112,16 @@ class JetbotYolo:
             self.detected_objects[obj["label"]] = current_object
 
 
-    def detect_Nearest_object(self, current_object):
-        if self.nearest_object is not None:
-            if current_object.get_size() > self.nearest_object.get_size():
-                self.nearest_object = current_object
-        else:
-            self.nearest_object = current_object
+    def detect_Nearest_object(self):
+        nearest = self.filtered_objects[0]
+        if len(self.nearest_object):
+            for obj in self.filtered_objects:
+                if obj.get_ymax() > nearest.get_ymax():
+                    nearest = obj
+
+            self.nearest_object = nearest
+
+
 
     def filter_nearest_object_of_each_type(self, objects):
         print("filter nearest object...")
