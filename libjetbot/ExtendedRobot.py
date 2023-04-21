@@ -27,6 +27,8 @@ class State:
     def max_limit(self, value: float):
         self._max_limit = value
 
+    def reset_to_default_limit(self):
+        self._max_limit = 0.1
 
 
 class ReturnCommand(Enum):
