@@ -1,4 +1,4 @@
 
-Dieses Verzeichnis stellt Package-Wheels für Installationen, sowie für das Training verwendete Images und Labels bereit.
+Dieses Verzeichnis stellt für das Training verwendete Images, Labels und Notebooks bereit.
 
   
