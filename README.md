@@ -11,18 +11,18 @@ Datenträger mit allen anderen benötigten Daten haben, können Sie die Aufforde
 Herunterladen von Programmen und Dateien ebenfalls überspringen und die Daten auf dem 
 vorhandenen Datenträger verwenden.
 
-1. JetBot Image downloaden
+1. JetBot Image downloaden <br />
   Besuchen Sie die Website https://jetbot.org/master/software_setup/sd_card.html und laden Sie die 
   .zip-Datei mit einer Größe von 12,7 GB für Modelle mit 4 GB RAM herunter.
   
-2. SD-Karte flashen 
+2. SD-Karte flashen <br />
   Besuchen Sie die Website https://www.balena.io/etcher und laden Sie balenaEtcher herunter. Stecken 
   Sie die SD-Karte des JetBot in einen Computer und öffnen Sie balenaEtcher. Klicken Sie nun auf „Flash 
   from file“ und wählen Sie die zuvor heruntergeladene .zip-Datei aus. Als nächstes klicken sie auf 
   „select target“ und wählen die eingesteckte SD-Karte aus. Zuletzt klicken sie auf „flash“ und warten bis 
   der Flashvorgang abgeschlossen ist. Dies kann zwischen 30 und 60 Minuten in Anspruch nehmen.
   
-3. SD-Karte in JetBot einführen und booten 
+3. SD-Karte in JetBot einführen und booten <br />
   Stecken Sie die fertige SD-Karte in den entsprechenden Steckplatz des JetBot. Dieser befindet sich auf 
   der oberen Platine direkt unter dem Kühlkörper und dem Lüfter. Achten Sie darauf, dass die Kontakte 
   der SD-Karte nach oben zeigen und die SD-Karte mit einem Klicken einrastet. Schließen Sie nun den 
@@ -37,7 +37,7 @@ vorhandenen Datenträger verwenden.
     username: jetbot
     password: jetbot
  
-4. Wifi und ssh 
+4. Wifi und ssh <br />
    Nachdem sie sich erfolgreich angemeldet haben, verbinden sie sich mit dem lokalen Netzwerk. Dazu 
    geben sie folgenden Befehl ein
   
@@ -56,7 +56,7 @@ vorhandenen Datenträger verwenden.
    wird erneut nach dem Passwort gefragt. Geben Sie dazu wieder „jetbot“ ein. Sie haben sich nun 
    erfolgreich per ssh mit dem JetBot verbunden.
   
-5. Partitionierung
+5. Partitionierung <br />
    Obwohl die SD-Karte eine Kapazität von 64 GB (oder 128 GB) hat, werden standardmäßig nur 24 GB 
    verwendet. Der Rest ist keiner Partition zugeordnet. Um die Partition zu vergrößern, müssen folgende 
    Befehle ausgeführt werden
@@ -75,14 +75,14 @@ vorhandenen Datenträger verwenden.
   
     `sudo fdisk -l` 
  
-6. Dateien kopieren 
+6. Dateien kopieren <br />
   Kopieren Sie den Ordner <Name des fertigen Projekts> von einem der verfügbaren Datenträger auf 
   die SD-Karte oder klonen Sie das GitHub-Repository mit folgendem Befehl
   
     `git clone
     https://github.com/andreasmy01/TeamorientiertesProjekt23JetBot/tree/main`
     
-7. Jetbot starten 
+7. Jetbot starten <br />
   Öffnen Sie einen Browser und geben Sie die IP des JetBots in die Adresszeile ein. Fügen Sie :8888 hinzu 
   und drücken Sie Enter. Für die IP-Adresse 192.168.1.145 würden sie z.B. „192.168.1.145:888“ in die 
   Adresszeile eingeben.
