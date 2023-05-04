@@ -87,8 +87,8 @@ vorhandenen Datenträger verwenden.
   und drücken Sie Enter. Für die IP-Adresse 192.168.1.145 würden sie z.B. „192.168.1.145:888“ in die 
   Adresszeile eingeben.
   Geben Sie das Passwort „jetbot“ ein und melden Sie sich an. Auf der linken Seite sehen Sie nun alle 
-  Ordner, die sich auf dem JetBot befinden. Öffnen Sie die Datei <NameNotebook>, die sich unter 
-  "<NameProjektOrdner>/NameNotebook" befindet. Stellen Sie den JetBot auf die Fahrbahn und folgen 
+  Ordner, die sich auf dem JetBot befinden. Öffnen Sie die Datei "LiveDemo_object_oriented.ipynb", die sich unter 
+  "TeamorientiertesProjekt23JetBot/LiveDemo_object_oriented.ipynb" befindet. Stellen Sie den JetBot auf die Fahrbahn und folgen 
   Sie den Anweisungen in der geöffneten Datei
   
 
