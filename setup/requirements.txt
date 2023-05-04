@@ -1,0 +1,19 @@
+# JetBot requirements
+# Usage: pip install -r requirements.txt
+
+# Base ------------------------------------------------------------------------
+gitpython
+numpy>=1.18.5
+Pillow>=7.1.2
+psutil  # system resources
+PyYAML>=5.3.1
+requests>=2.23.0
+thop>=0.1.1  # FLOPs computation
+tqdm
+
+# Plotting --------------------------------------------------------------------
+seaborn>=0.11.0
+
+# Deploy ----------------------------------------------------------------------
+setuptools # Snyk vulnerability fix
+
