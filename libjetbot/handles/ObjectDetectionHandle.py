@@ -73,7 +73,7 @@ class ObjectDetectionHandle(Handle, HasTraits):
         # invoke method to get classes
         self.state = state
         self.adapt_thresholds_to_speed()
-        self.yolo.run_detection_only(image)
+        self.yolo.run_detection(image)
 
         detected = self.yolo.get_nearest_object()
         self.last_detected = 'No sign' if detected is None else detected.get_type()
