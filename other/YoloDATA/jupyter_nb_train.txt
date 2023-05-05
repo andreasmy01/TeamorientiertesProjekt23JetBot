@@ -1,26 +1,31 @@
-# Setup vorher machen
-# benötigt entzippten Ordner train_data mit image und val subfoldern
-# benötigt entsprechende coco128.yaml Datei mit richtigen Pfaden
-# 
+# Für YOLO Training: https://colab.research.google.com/github/ultralytics/yolov5/blob/master/classify/tutorial.ipynb#scrollTo=zR9ZbuQCH7FX (Google Server mit Google Privacy Policy)
+# 1. Zuerst Setup Zelle ausführen
+### !git clone https://github.com/ultralytics/yolov5  # clone
+### %cd yolov5
+### %pip install -qr requirements.txt  # install
+### import torch
+### import utils
+### display = utils.notebook_init()  # checks
 
+# 2. train_data.zip hochladen --> danach entzippen: !unzip -q ../train_data.zip -d ../
+# 3. benötigt angepasste mycoco128.yaml Datei im Ordner /content/yolov5/data/
+### path: ../train_data
+### train: ../train_data/images/train  
+### val: ../train_data/images/val
+### test: 
 
+### names:
+###   0: sign_forbidden
+###   1: sign_limit
+###   2: sign_nolimit
+###   3: sign_stop
+###   4: kreuzung
 
-# !git clone https://github.com/ultralytics/yolov5  # clone
-# %cd yolov5
-# %pip install -qr requirements.txt  # install
+# 4. Training --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights yolov5n.pt
+# 5. Falls danach nochmal Training mit Ergebnis-Model aus 4. --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights /content/yolov5/runs/train/exp/best.pt
+# 6. Falls danach nochmal Training mit Ergebnis-Model aus 5. --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights /content/yolov5/runs/train/exp2/best.pt
+# 7. ... Statistiken anschauen in /content/yolov5/runs/train/exp3/ ...
+# 8. Zum Testen des Ergebnis noch andere Bilder als .zip hochladen --> danach entzippen: !unzip -q ../<ordner_name>.zip -d ../
+# 9. Zum Testen detect ausführen --> !python detect.py --img 224 --conf 0.3 --source '/content/<ordner_name>/*' --weights '/content/yolov5/runs/train/exp3/weights/best.pt'
 
-# import torch
-# import utils
-# display = utils.notebook_init()  # checks
-
-
-# --img war davor 640
-
-# unzip -q ../train_data.zip -d ../
-!python train.py --img 224 --epochs 120 --data coco128.yaml --weights yolov5s.pt
-python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights yolov5s.pt
-
-
-
-#!unzip -q ../test_result_with_images.zip -d ../
-!python detect.py --img 224 --conf 0.3 --source '/content/test_result_with_images/*' --weights '/content/yolov5/runs/train/exp6/weights/best.pt'
+# Am Ende: best.pt downloaden 
