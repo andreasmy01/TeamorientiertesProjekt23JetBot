@@ -8,22 +8,10 @@
 ### display = utils.notebook_init()  # checks
 
 # 2. train_data.zip hochladen --> danach entzippen: !unzip -q ../train_data.zip -d ../
-# 3. benötigt angepasste mycoco128.yaml Datei im Ordner /content/yolov5/data/
-### path: ../train_data
-### train: ../train_data/images/train  
-### val: ../train_data/images/val
-### test: 
-
-### names:
-###   0: sign_forbidden
-###   1: sign_limit
-###   2: sign_nolimit
-###   3: sign_stop
-###   4: kreuzung
-
-# 4. Training --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights yolov5n.pt
-# 5. Falls danach nochmal Training mit Ergebnis-Model aus 4. --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights /content/yolov5/runs/train/exp/best.pt
-# 6. Falls danach nochmal Training mit Ergebnis-Model aus 5. --> !python train.py --img 224 --epochs 120 --data mycoco128.yaml --weights /content/yolov5/runs/train/exp2/best.pt
+# 3. benötigt angepasste my_coco128.yaml Datei im Ordner /content/yolov5/data/
+# 4. Training --> !python train.py --img 224 --epochs 120 --data my_coco128.yaml --weights yolov5n.pt
+# 5. Falls danach nochmal Training mit Ergebnis-Model aus 4. --> !python train.py --img 224 --epochs 120 --data my_coco128.yaml --weights /content/yolov5/runs/train/exp/best.pt
+# 6. Falls danach nochmal Training mit Ergebnis-Model aus 5. --> !python train.py --img 224 --epochs 120 --data my_coco128.yaml --weights /content/yolov5/runs/train/exp2/best.pt
 # 7. ... Statistiken anschauen in /content/yolov5/runs/train/exp3/ ...
 # 8. Zum Testen des Ergebnis noch andere Bilder als .zip hochladen --> danach entzippen: !unzip -q ../<ordner_name>.zip -d ../
 # 9. Zum Testen detect ausführen --> !python detect.py --img 224 --conf 0.3 --source '/content/<ordner_name>/*' --weights '/content/yolov5/runs/train/exp3/weights/best.pt'
