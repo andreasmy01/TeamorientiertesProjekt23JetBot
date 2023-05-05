@@ -6,11 +6,7 @@ https://www.youtube.com/watch?v=GRtgLlwxpc4
 
 Vorgehensweise:
 
-1. Bilder in train_data --> images o. labels --> train o. val [labels bleibt vorerst leer]
+1. Bilder in train_data --> images o. labels --> train o. val [labels bleibt vorerst leer, 80% der Bilder in train, 20% der Bilder in val]
 2. auf makesense.ai images von train und val jeweils in gleichbleibender Reihenfolge labeln 
 --> export für YOLO Format --> in labels ordner einfügen
-3. yolov5 github repo klonen --> requirements.txt installieren --> classify/tutorial.ipynb öffnen 
---> train_data.zip in classify/ hochladen und entpacken
-4. /content/yolov5/data/coco128.yaml Datei anpassen (Pfade und Labels)
-5. Oneliner fürs Training
-6. bilder.zip mit neuen Bildern hochladen und entpacken --> Oneliner fürs Detecten der Bilder mit neuem Model (zum Test)
+3. Anleitung siehe jupyter_nb_train.txt
