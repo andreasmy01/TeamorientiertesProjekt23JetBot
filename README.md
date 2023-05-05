@@ -84,7 +84,7 @@ vorhandenen Datenträger verwenden.
     
 7. Jetbot starten <br />
   Öffnen Sie einen Browser und geben Sie die IP des JetBots in die Adresszeile ein. Fügen Sie :8888 hinzu 
-  und drücken Sie Enter. Für die IP-Adresse 192.168.1.145 würden sie z.B. „192.168.1.145:888“ in die 
+  und drücken Sie Enter. Für die IP-Adresse 192.168.1.145 würden sie z.B. „192.168.1.145:8888“ in die 
   Adresszeile eingeben.
   Geben Sie das Passwort „jetbot“ ein und melden Sie sich an. Auf der linken Seite sehen Sie nun alle 
   Ordner, die sich auf dem JetBot befinden. Öffnen Sie die Datei "LiveDemo_object_oriented.ipynb", die sich unter 
