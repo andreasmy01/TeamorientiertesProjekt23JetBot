@@ -137,7 +137,7 @@ Kopieren Sie den Ordner TeamorientiertesProjekt23JetBot (Anlage, im Ordner 2_COD
    Sie führen eine Zelle aus, indem Sie mit der Maus die entsprechende Zelle mit der linken Maustaste anklicken und dann entweder auf 
    <br> den Button ▶️ Run klicken oder Shift + Enter auf der Tastatur drücken.
    <br><br> Eine Zelle verfügt über 3 unterschiedliche Zustände, welche sich anhand des Symbols in den eckigen Klammer links der jeweiligen Zelle auslesen lassen:
-   * \[ ] Kernel wurde neu gestartet & alle Ausgaben wurden gelöscht → In diesem Stand sollten sich alle Zellen befinden, bevor ein Notebook ausgeführt wird.
+   * [] Kernel wurde neu gestartet & alle Ausgaben wurden gelöscht → In diesem Stand sollten sich alle Zellen befinden, bevor ein Notebook ausgeführt wird.
    * [*] Zelle wird aktuell ausgeführt und die Ausführung ist noch nicht fertiggestellt
    * [3] Zelle wurde erfolgreich ausgeführt → Die Zahl steht für die Reihenfolge, in welcher die einzelnen Zellen ausgeführt wurden
 
