@@ -3,7 +3,9 @@
 
 ## **JetBot Quick Guide**
 
-Ergebnis (Video): https://short.mlandth.de/2BK9eq
+Ergebnis: [Video](https://github.com/andreasmy01/TeamorientiertesProjekt23JetBot/blob/561b8182af3788e9dd23cd99ed71b44459b58873/live-demo.mp4) 
+
+Eine PDF Version dieser Anleitung gibt es [hier](https://github.com/andreasmy01/TeamorientiertesProjekt23JetBot/blob/561b8182af3788e9dd23cd99ed71b44459b58873/Quick-Start.pdf).
 
 Diese Kurzanleitung dient dazu, einen JetBot ohne aufwändige Installation in Betrieb zu nehmen und eine Live-Demo vorzuführen.
 ### Voraussetzungen:
